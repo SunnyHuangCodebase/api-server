@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	http.HandleFunc("/", handleRoot)
 	http.HandleFunc("/hello-world", handleHelloWorld)
 	http.HandleFunc("/health", handleHealth)
 
@@ -19,6 +20,15 @@ func main() {
 	}
 }
 
+func handleRoot(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
+	}
+
+	writeResponse(w, "Welcome")
+}
+
 func handleHelloWorld(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
@@ -26,7 +36,6 @@ func handleHelloWorld(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeResponse(w, "Hello World")
-
 }
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {
